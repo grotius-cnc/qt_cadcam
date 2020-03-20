@@ -7,7 +7,7 @@ A perfect cubic-spline function is over here : https://github.com/grotius-cnc/ca
 
 The dxf read function's can be improved. A better dxf read in function is over here : https://github.com/grotius-cnc/cadcam/tree/master/dxf, it also read in splines and ellipses.
 
-When cadcam is compiled, place the cadcam directory inside the directory where the ./cadcam executable lives.
+When the program is compiled, place the cadcam directory inside the directory where the ./cadcam executable lives.
 This cadcam directory includes user defined settings like : layers, linetypes, colors etc.
 
 The cadcam program is able to print the drawing as pdf or png format in a4,a3,a1,a0 dimensions.
