@@ -7,6 +7,9 @@ A perfect cubic-spline function is here : https://github.com/grotius-cnc/cadcam/
 
 When compiled, place the cadcam directory inside the directory where the ./cadcam executable lives.
 
+![](https://raw.githubusercontent.com/grotius-cnc/QT_cadcam/master/cadcam_screenshot.png)
+
+
 
 build on linux :
 Qt Creator 4.8.2
