@@ -1,6 +1,6 @@
 # QT_cadcam
 
-This is a project i worked on. It's a nice project, but not as good as Draftsight.
+This is a project i worked on. It's a nice project, but not as good as Draftsight at this stage. 
 
 The spline function has to be replaced, the cam engrave text function has to be improved. 
 A perfect cubic-spline function is over here : https://github.com/grotius-cnc/cadcam/blob/master/opengl.cpp
