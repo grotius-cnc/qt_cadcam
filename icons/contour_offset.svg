@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="64px"
+   height="64px"
+   id="svg2726"
+   sodipodi:version="0.32"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="contour_offset.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.1">
+  <defs
+     id="defs2728">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 32 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="64 : 32 : 1"
+       inkscape:persp3d-origin="32 : 21.333333 : 1"
+       id="perspective2734" />
+    <linearGradient
+       id="linearGradient3836-0">
+      <stop
+         style="stop-color:#c4a000;stop-opacity:1;"
+         offset="0"
+         id="stop3838-2" />
+      <stop
+         style="stop-color:#fce94f;stop-opacity:1;"
+         offset="1"
+         id="stop3840-5" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3836-0-6">
+      <stop
+         style="stop-color:#c4a000;stop-opacity:1;"
+         offset="0"
+         id="stop3838-2-7" />
+      <stop
+         style="stop-color:#fce94f;stop-opacity:1;"
+         offset="1"
+         id="stop3840-5-5" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8.1585903"
+     inkscape:cx="55.88422"
+     inkscape:cy="25.397402"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:document-units="px"
+     inkscape:grid-bbox="true"
+     inkscape:window-width="2560"
+     inkscape:window-height="1380"
+     inkscape:window-x="0"
+     inkscape:window-y="31"
+     inkscape:snap-bbox="true"
+     inkscape:snap-nodes="false"
+     inkscape:window-maximized="1"
+     inkscape:snap-others="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2999"
+       units="px"
+       empspacing="2"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       spacingx="1"
+       spacingy="1"
+       originx="0"
+       originy="0" />
+  </sodipodi:namedview>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <rect
+       style="opacity:1;fill:#00ff0a;fill-opacity:1;fill-rule:nonzero;stroke:#037100;stroke-width:7.8605361;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect4547-6-56-1"
+       width="55.154823"
+       height="55.757668"
+       x="-59.654964"
+       y="3.9619622"
+       transform="matrix(-0.00386893,-0.99999252,0.99999998,2.0879982e-4,0,0)" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8.0407114;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect4596-2-2"
+       width="47.55724"
+       height="48.415226"
+       x="7.9244061"
+       y="8.0064821" />
+    <rect
+       style="opacity:1;fill:#00ff0a;fill-opacity:1;fill-rule:nonzero;stroke:#037100;stroke-width:7.54833698;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect4547-6-56-1-7"
+       width="32.909157"
+       height="31.028219"
+       x="-48.715508"
+       y="16.088182"
+       transform="matrix(-0.00360836,-0.99999349,0.99999997,2.2387804e-4,0,0)" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect4596-2-2-5"
+       width="22.062639"
+       height="23.656046"
+       x="20.65119"
+       y="20.51026" />
+  </g>
+  <metadata
+     id="metadata4723">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="" />
+        <dc:date>Mon Oct 10 13:44:52 2011 +0000</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>[wmayer]</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>FreeCAD LGPL2+</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>FreeCAD</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:identifier>FreeCAD/src/Mod/Draft/Resources/icons/Draft_Line.svg</dc:identifier>
+        <dc:relation>http://www.freecadweb.org/wiki/index.php?title=Artwork</dc:relation>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>[agryson] Alexander Gryson</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>dot</rdf:li>
+            <rdf:li>line</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>A line at an angle from lower left to upper right with a dot at each end</dc:description>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
