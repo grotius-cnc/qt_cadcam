@@ -1,0 +1,14 @@
+#ifndef NODE_H
+#define NODE_H
+
+#include <QMainWindow>
+#include <QTreeView>
+
+class node
+{
+public:
+    node();
+
+};
+
+#endif // NODE_H

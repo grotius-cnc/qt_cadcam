@@ -1,0 +1,93 @@
+#include "scan_nearest_circle.h"
+#include <core_functions/variables.h>
+#include <math.h>
+
+scan_nearest_circle::scan_nearest_circle(int x, int y)
+{
+    for (int i = 0; i < cad_counter; i++) {
+
+        if(int_cad_array[i][0] == 2 && int_cad_array[i][3]==1){ //id = circle
+
+            //circle - circle intersection...
+            double cx0 = x;
+            double cy0 = y;
+            double radius0 = 1; //search dist for mouse pointer..
+
+            double cx1 = double_cad_array[i][6];
+            double cy1 = double_cad_array[i][7];
+            double radius1 = double_cad_array[i][9];
+
+            // Find the distance between the centers.
+            double dx = cx0 - cx1;
+            double dy = cy0 - cy1;
+            double dist = sqrt(dx * dx + dy * dy);
+
+            // See how many solutions there are.
+            if (dist > radius0 + radius1)
+            {
+                //qDebug() << "No solution";
+                //contournumber = -1;
+            }
+            else if (dist < abs(radius0 - radius1))
+            {
+                //qDebug() << "No solutions, one circle contains the other";
+                //contournumber = -1;
+            }
+            else if ((dist == 0) && (radius0 == radius1))
+            {
+                //qDebug() << "No solutions, the circles coincide";
+                //contournumber = -1;
+            }
+            else
+            {
+                //at this stage we end up with 2 intersections.. but we don't need the intersection points.. we now know wich circle is the target for a line-circle intersect calculation..
+                //line - circle intersection..
+                double circle_center_x = double_cad_array[i][6];    //array target circle center x
+                double circle_center_y = double_cad_array[i][7];    //array target circle center y
+                double radius = double_cad_array[i][9];             //array target circle radius
+
+                double start_line_x1 = double_cad_array[i][6];      //line from target circle center x
+                double start_line_y1 = double_cad_array[i][7];      //line from target circle center y
+                double end_line_x2 = x;               //line from actual mouse coordinate x..
+                double end_line_y2 = y;               //line from actual mouse coordinate y..
+
+                //test code.... to find if point is between arc start and arc end angle to determine if we can do a arc select and arc nearest intersection..
+                //double_cad_array[cad_counter][0][13] = 180/M_PI*atan2(Y3-y_center, X3-x_center);    //start angle g2
+                double angle = 180/M_PI*atan2(y - circle_center_y, x - circle_center_x);
+                //transform to cad 0 to 360 degrees instead of the above 0 to 180 and -180 to 0..
+                if(angle<=0){angle = 360 - (angle*-1);} //solved in one line..
+                if(double_cad_array[i][11] == 0){double_cad_array[i][11] = 360;} //spotted a cad bug while reading a autodesk dxf.. when a end angle = 0, we mean the end angle = 360 degrees..
+                //qDebug() << "angle = : " << angle; //sucess..
+
+                double dx, dy, A, B, C, det, t;
+
+                dx = end_line_x2 - start_line_x1;
+                dy = end_line_y2 - start_line_y1;
+
+                A = dx * dx + dy * dy;
+                B = 2 * (dx * (start_line_x1 - circle_center_x) + dy * (start_line_y1 - circle_center_y));
+                C = (start_line_x1 - circle_center_x) * (start_line_x1 - circle_center_x) + (start_line_y1 - circle_center_y) * (start_line_y1 - circle_center_y) - radius * radius;
+
+                det = B * B - 4 * A * C;
+
+                t = (-B + sqrt(det)) / (2 * A);
+                double intersection_x1 = (start_line_x1 + t * dx);
+                double intersection_y1 = (start_line_y1 + t * dy);
+
+                t = (-B - sqrt(det)) / (2 * A);
+                double intersection_x2 = (start_line_x1 + t * dx);
+                double intersection_y2 = (start_line_y1 + t * dy);
+
+                //find closest solution..
+                double c1 = sqrt(pow(x-intersection_x1,2) + pow(y-intersection_y1,2));
+                double c2 = sqrt(pow(x-intersection_x2,2) + pow(y-intersection_y2,2));
+
+                if(c1<c2){
+                    contournumber = int_cad_array[i][14];
+                } else {
+                    contournumber = int_cad_array[i][14];
+                }
+            }
+        }
+    }
+}

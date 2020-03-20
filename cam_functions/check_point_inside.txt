@@ -1,0 +1,54 @@
+int inpoly_start = 0; int checkpoint_x_start = 0; int checkpoint_y_start = 0;
+int inpoly_mid = 0; int checkpoint_x_mid = 0; int checkpoint_y_mid = 0;
+int inpoly_end = 0; int checkpoint_x_end = 0; int checkpoint_y_end = 0;
+int inpoly_left = 0; int checkpoint_x_left = 0; int checkpoint_y_left = 0;
+int inpoly_right = 0; int checkpoint_x_right = 0; int checkpoint_y_right = 0;
+int inpoly_top = 0; int checkpoint_x_top = 0; int checkpoint_y_top = 0;
+int inpoly_bottom = 0; int checkpoint_x_bottom = 0; int checkpoint_y_bottom = 0;
+int inpoly_control_a = 0; int checkpoint_x_control_a = 0; int checkpoint_y_control_a = 0;
+int inpoly_control_b = 0; int checkpoint_x_control_b = 0; int checkpoint_y_control_b = 0;
+
+
+Path path;
+Paths total;
+
+path.push_back(IntPoint(x_start, y_start));
+path.push_back(IntPoint(x_start, y_start));
+path.push_back(IntPoint(x_start, y_start));
+etc..
+etc..
+
+CleanPolygon(path, 1.415);
+total.push_back(path);
+path.clear();
+
+PolyNode* polynode = array.GetFirst();
+PolyTree array;
+ClipperLib::Clipper c;
+c.Clear();
+c.AddPaths(total, ptSubject, true);
+c.Execute(ctDifference,array);
+
+PolyNode* polynode = array.GetFirst();
+
+while (polynode)
+{
+
+    if(int(your_x_pos) == int(polynode->Contour.at(0).X) && int(your_y_pos) == int(polynode->Contour.at(0).Y)){
+        //match found, now you know the polygon id..
+
+        if(polynode->IsHole() == 0){
+            //do something..
+        }
+        if(polynode->IsHole() == 1){
+            //do something..
+        }
+    }
+    polynode = polynode->GetNext();
+}
+
+//clean up memory..
+path.clear();
+path.shrink_to_fit();
+total.clear();
+total.shrink_to_fit();

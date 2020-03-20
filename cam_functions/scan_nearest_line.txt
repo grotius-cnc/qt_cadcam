@@ -1,0 +1,65 @@
+#include "scan_nearest_line.h"
+#include <core_functions/variables.h>
+
+scan_nearest_line::scan_nearest_line(int x, int y)
+{
+    for (int i = 0; i < cad_counter; i++) {
+
+        //circle to line intersection calculation..
+        if(int_cad_array[i][0] == 1 && int_cad_array[i][3]==1){ //id = line..
+
+            //mouse pointer..
+            double circle_center_x = x;     //orginal circle center x
+            double circle_center_y = y;     //orginal circle center y
+            double radius = 1;      //search dist for mouse pointer..
+
+            //line to intersect..
+            double start_line_x1 = double_cad_array[i][0];          //x_start c
+            double start_line_y1 = double_cad_array[i][1];          //y_start
+            double end_line_x2 = double_cad_array[i][3];            //x_end
+            double end_line_y2 = double_cad_array[i][4];            //y_end
+
+            double nearest_x, nearest_y;
+            double dx, dy, A, B, C, det, t, AB, AP, PB;
+
+            dx = end_line_x2 - start_line_x1;
+            dy = end_line_y2 - start_line_y1;
+
+            A = dx * dx + dy * dy;
+            B = 2 * (dx * (start_line_x1 - circle_center_x) + dy * (start_line_y1 - circle_center_y));
+            C = (start_line_x1 - circle_center_x) * (start_line_x1 - circle_center_x) + (start_line_y1 - circle_center_y) * (start_line_y1 - circle_center_y) - radius * radius;
+
+            det = B * B - 4 * A * C;
+
+            t = (-B + sqrt(det)) / (2 * A);
+            double intersection_x1 = (start_line_x1 + t * dx);
+            double intersection_y1 = (start_line_y1 + t * dy);
+
+            t = (-B - sqrt(det)) / (2 * A);
+            double intersection_x2 = (start_line_x1 + t * dx);
+            double intersection_y2 = (start_line_y1 + t * dy);
+
+            //calculate the midpoint for the 2 intersections for a line..
+            nearest_x = (intersection_x1 + intersection_x2)/2;
+            nearest_y = (intersection_y1 + intersection_y2)/2;
+
+            //check if point lives on the current line..
+            //Find the distance of point P from both the line end points A, B. If AB = AP + PB, then P lies on the line segment AB.
+            //when multiple lines are drawed in the same line (vector).. multiple lines will be highlited, to prevent this we add the formula below if pointer is on the current line..
+
+            AB = sqrt(pow(end_line_x2-start_line_x1, 2) + pow(end_line_y2-start_line_y1, 2));
+            AP = sqrt(pow(end_line_x2-nearest_x, 2) + pow(end_line_y2-nearest_y, 2));
+            PB = sqrt(pow(start_line_x1-nearest_x, 2) + pow(start_line_y1-nearest_y, 2));
+
+            if(AB < (AP + PB) + 1 && AB > (AP + PB) - 1){ // add tollerance of 1mm..
+                //intersection
+                contournumber = int_cad_array[i][14];
+                break;
+            } else {
+                //no intersecion
+                contournumber = -1;
+
+            }
+        }
+    }
+}

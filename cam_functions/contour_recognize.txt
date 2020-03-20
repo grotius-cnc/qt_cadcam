@@ -1,0 +1,329 @@
+#include "contour_recognize_h.txt"
+#include <core_functions/variables.h>
+#include <array_functions/copy_cad_to_cam_array.h>
+#include <display_functions/no_selection.h>
+#include <array_functions/purge_array.h>
+#include <cam_functions/triangulation.h>
+
+contour_recognize::contour_recognize()
+{
+
+    //purge_array(); //delete emtpy array lines.. purge array before calculate contours..
+    double tol/*lerance*/ = 0.1; //mm
+
+    if(cad_counter < 2){mode_contour_recognize = 0; loop_times=1;}
+
+    if(!loop_times){
+        loop_times = 1;
+        cam_counter = 0;
+        contournumber = -1;
+
+        if(click == 0){
+            messagebox_text = "<b><i>mode contour recognize </i></b> ";
+        }
+
+        //mark end match in array as open contours.. will be overwritten if there are any objects that are connected within the tollerance (tol)..
+        for(int i = 0; i<cad_counter; i++){
+            int_cad_array[i][10] = -1;
+            int_cad_array[i][11] = -1;
+            //int_cad_array[i][1] = 7; //color white..
+        }
+
+        //define closed contours.. add start and end match numbers..
+        for(int i = 0; i<cad_counter; i++){
+            for(int j = 0; j<cad_counter; j++){
+
+                if(i != j){
+                    if ((double_cad_array[i][0] <= double_cad_array[j][0] + tol) && (double_cad_array[i][0] >= double_cad_array[j][0] - tol) &&
+                            (double_cad_array[i][1] <= double_cad_array[j][1] + tol) && (double_cad_array[i][1] >= double_cad_array[j][1] - tol)) {
+                        int_cad_array[i][10] = j;
+                    }
+                    if ((double_cad_array[i][0] <= double_cad_array[j][3] + tol) && (double_cad_array[i][0] >= double_cad_array[j][3] - tol) &&
+                            (double_cad_array[i][1] <= double_cad_array[j][4] + tol) && (double_cad_array[i][1] >= double_cad_array[j][4] - tol)){
+                        int_cad_array[i][10] = j;
+                    }
+                    if ((double_cad_array[i][3] <= double_cad_array[j][3] + tol) && (double_cad_array[i][3] >= double_cad_array[j][3] - tol) &&
+                            (double_cad_array[i][4] <= double_cad_array[j][4] + tol) && (double_cad_array[i][4] >= double_cad_array[j][4] - tol)){
+                        int_cad_array[i][11] = j;
+                    }
+                    if ((double_cad_array[i][3] <= double_cad_array[j][0] + tol) && (double_cad_array[i][3] >= double_cad_array[j][0] - tol) &&
+                            (double_cad_array[i][4] <= double_cad_array[j][1] + tol) && (double_cad_array[i][4] >= double_cad_array[j][1] - tol)){
+                        int_cad_array[i][11] = j;
+                    }
+                }
+            }
+        }
+
+        //compare if closed contour..
+        bool bool_start = 0;
+        int int_start = 0;
+        int count = 0;
+        int i = 0;
+        bool stop = 0;
+        //qDebug() << "contournumber : " << contournumber; //contournumber++;
+
+        while(!stop){
+            for(int j = 0; j<cad_counter; j++){
+
+                if(count == cad_counter){ //stop while loop..
+                    stop = 1;
+
+                } else if(i != j){
+
+                    //for every i, avoid matching start -> start, flip to start -> end..
+                    if ((double_cad_array[i][0] <= double_cad_array[j][0] + tol) && (double_cad_array[i][0] >= double_cad_array[j][0] - tol) &&
+                            (double_cad_array[i][1] <= double_cad_array[j][1] + tol) &&  (double_cad_array[i][1] >= double_cad_array[j][1] - tol) &&
+                            (int_cad_array[i][3] == 0 || int_cad_array[j][3] == 0)){
+                        //qDebug() << "start start match for i = " << i << " is j : " << j;
+                        //int_cad_array[i][10] = j;
+
+                        //flip startpoint to endpoint, flip endpont to startpoint..
+                        double temp_x_start = double_cad_array[j][0];
+                        double temp_y_start = double_cad_array[j][1];
+                        double_cad_array[j][0] = double_cad_array[j][3];
+                        double_cad_array[j][1] = double_cad_array[j][4];
+                        double_cad_array[j][3] = temp_x_start;
+                        double_cad_array[j][4] = temp_y_start;
+                    }
+
+                    //for every i, avoid matching end -> end, flip to end -> start..
+                    if ((double_cad_array[i][3] <= double_cad_array[j][3] + tol) && (double_cad_array[i][3] >= double_cad_array[j][3] - tol) &&
+                            (double_cad_array[i][4] <= double_cad_array[j][4] + tol) && (double_cad_array[i][4] >= double_cad_array[j][4] - tol) &&
+                            (int_cad_array[i][3] == 0 || int_cad_array[j][3] == 0)){
+                        //qDebug() << "end end match for i = " << i << " is j : " << j;
+                        //int_cad_array[i][11] = j;
+
+                        //flip startpoint to endpoint, flip endpont to startpoint..
+                        double temp_x_start = double_cad_array[j][0];
+                        double temp_y_start = double_cad_array[j][1];
+                        double_cad_array[j][0] = double_cad_array[j][3];
+                        double_cad_array[j][1] = double_cad_array[j][4];
+                        double_cad_array[j][3] = temp_x_start;
+                        double_cad_array[j][4] = temp_y_start;
+                    }
+
+                    //find start contourloop and look for stand alone objects..
+                    if ((double_cad_array[i][3] <= double_cad_array[j][0] + tol) && (double_cad_array[i][3] >= double_cad_array[j][0] - tol) &&
+                            (double_cad_array[i][4] <= double_cad_array[j][1] + tol) && (double_cad_array[i][4] >= double_cad_array[j][1] - tol) &&
+                            !bool_start && (int_cad_array[i][11] != -1 || int_cad_array[i][10] != -1) && (int_cad_array[i][3] == 0 || int_cad_array[j][3] == 0)){
+
+                        //qDebug() << "next match for this object : " << i << " is match : " << j;
+                        object_list.append(i); //append for cw, ccw calculation..
+                        int_cad_array[i][11] = j; //end match..
+                        int_cad_array[i][3] = 1; //object selected
+
+                        bool_start = 1;
+                        i = j;
+                        count++; //qDebug() << "count : " << count;
+
+                        //next has no start match and no end match
+                    }
+                    //next has no start match and no end match, stand alone object..
+                    if((int_cad_array[i][11] == -1 && int_cad_array[i][10] == -1) && (int_cad_array[i][0] != 0 || int_cad_array[j][0] != 0)){ //must have id line etc, otherwise it's a empty array line..
+                        //qDebug() << "contournumber : " << contournumber; contournumber++;
+                        if(count<cad_counter){
+                            //qDebug() << "stand alone object : " << i;
+                        }
+
+                        int_cad_array[i][3] = 1;
+                        int_cad_array[i][15] = 1; //color grey for open contours..
+
+                        object_list.append(i);
+
+                        if(count<cad_counter){
+                            define_cw_ccw(1); //do the calculation for cw or ccw.. color this object grey..
+                        }
+                        count++;
+
+                        //find first non selected object..
+                        for(int s = 0; s<cad_counter; s++){
+                            if(int_cad_array[s][3] == 0){
+                                int_start = s;
+                                i = s;
+                                //qDebug() << "int_start : " << int_start;
+                                break;
+                            }
+                        }
+                        break;
+                    } else if((int_cad_array[i][11] == -1 && int_cad_array[i][10] != -1) && (int_cad_array[i][0] != 0 || int_cad_array[j][0] != 0)){ //must have id line etc, otherwise it's a empty array line.. //next has no end match
+                        if(count<cad_counter){
+                            //qDebug() << "no end match, only start match, this object : " << i << " start match object " << int_cad_array[i][10];
+                        }
+                        int_cad_array[i][3] = 1;
+                        int_cad_array[i][15] = 1; //color grey for open contours..
+
+                        object_list.append(i);
+                        if(count<cad_counter){ //this to avoid double printing when the function finishes with a double printing of the last line..
+                            define_cw_ccw(0); //do the calculation for cw or ccw.. color them all grey..
+
+                        }
+                        count++;
+                        //find first non selected object..
+                        for(int s = 0; s<cad_counter; s++){
+                            if(int_cad_array[s][3] == 0){
+                                int_start = s;
+                                i = s;
+                                //qDebug() << "int_start : " << int_start;
+                                break;
+                            }
+                        }
+                        break;
+                    } else if((int_cad_array[i][11] != -1 && int_cad_array[i][10] == -1) && (int_cad_array[i][0] != 0 || int_cad_array[j][0] != 0)){ //must have id line etc, otherwise it's a empty array line.. //next has no start match
+                        //qDebug() << "no start match, only end match, this object : " << i << " end match object " << int_cad_array[i][11];
+                        int_cad_array[i][3] = 1;
+                        int_cad_array[i][15] = 1; //color grey for open contours..
+                        //qDebug() << "contournumber : " << contournumber;  contournumber++;
+                        object_list.append(i);
+                        define_cw_ccw(1); //do the calculation for cw or ccw.. color them all grey..
+                        count++;
+
+                        //find first non selected object..
+                        for(int s = 0; s<cad_counter; s++){
+                            if(int_cad_array[s][3] == 0){
+                                int_start = s;
+                                i = s;
+                                //qDebug() << "int_start : " << int_start;
+                                break;
+                            }
+                        }
+                        break;
+                    } else if ((double_cad_array[i][3] <= double_cad_array[j][0] + tol) && (double_cad_array[i][3] >= double_cad_array[j][0] - tol) && //inside the contourloop and end the loop..
+                               (double_cad_array[i][4] <= double_cad_array[j][1] + tol) && (double_cad_array[i][4] >= double_cad_array[j][1] - tol) &&
+                               bool_start && (int_cad_array[i][3] == 0 || int_cad_array[j][3] == 0)){
+
+                        if(j == int_start){ //end contour..
+                            //qDebug() << "next match for this object : " << i << " is match : " << j;
+                            //qDebug() << "contournumber : " << contournumber;  contournumber++;
+                            object_list.append(i); //append for cw, ccw calculation..
+                            define_cw_ccw(1); //calculate the contour for cw or ccw, add contournumbers to objects.. *** if list has one open object, color grey, change them all in the list to grey !!
+                            int_cad_array[i][3] = 1; //object selected
+                            bool_start = 0;
+                            count++; //qDebug() << "count : " << count;
+
+                            //find first non selected object..
+                            for(int s = 0; s<cad_counter; s++){
+                                if(int_cad_array[s][3] == 0){
+                                    int_start = s;
+                                    i = s;
+                                    //qDebug() << "int_start : " << int_start;
+                                    break;
+                                }
+                            }
+                        } else { //continue contour..
+
+                            //qDebug() << "next match for this object : " << i << " is match : " << j;
+                            object_list.append(i); //append for cw, ccw calculation..
+                            int_cad_array[i][11] = j;
+                            int_cad_array[i][3] = 1; //object selected
+                            i = j;
+                            count++; //qDebug() << "count : " << count;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    mode_contour_recognize = 0;
+    no_selection();
+}
+
+void contour_recognize::define_cw_ccw(bool end){
+
+    //check cw or ccw..
+
+    bool grey =0;
+
+    QVector<int>::iterator it;
+
+    //check if one object is grey inside a open contour.. so yes, color them all grey..
+
+    for(it = object_list.begin(); it != object_list.end(); ++it){
+
+        if(int_cad_array[*it][15] == 1){
+            grey = 1; //qDebug() << "grey found at i : " << i; //found one ore more grey lines.. this means open contours..
+            break;
+        }
+    }
+
+    if(grey){
+
+        if(end){
+            contournumber++;
+        }
+
+        for(it = object_list.begin(); it != object_list.end(); ++it ){
+
+            int_cad_array[*it][15] = 1;
+            int_cad_array[*it][14] = contournumber;
+        }
+    }
+
+    //the final cw or ccw calculation..
+    if(!grey){
+
+        contournumber++;
+
+        //the eara is done at preprocess stage. so contour direction is not at cw or ccw level.
+        double sum = 0;
+        for(it = object_list.begin(); it != object_list.end()-1; ++it){
+
+               sum+=((double_cad_array[*it+1][0] - double_cad_array[*it][0])) * ((double_cad_array[*it+1][1] + double_cad_array[*it][1]));
+               //qDebug() << " x+1 : " << double_cad_array[*it+1][0] << " x : " << double_cad_array[*it][0] << " y+1 : " << double_cad_array[*it+1][1] << " y : " << double_cad_array[*it][1];
+        }
+
+        sum+=((double_cad_array[object_list.at(0)][0] - double_cad_array[object_list.last()][0])) * ((double_cad_array[object_list.at(0)][1] + double_cad_array[object_list.last()][1]));
+        //qDebug() << " x+1 : " << double_cad_array[object_list.at(0)][0] << " x : " << double_cad_array[object_list.last()][0] << " y+1 : " << double_cad_array[object_list.at(0)][1]  << " y : " << double_cad_array[object_list.last()][1];
+
+        sum = sum/2; //area is sum/0.5
+
+        qDebug() << "sum / area mm2 :" << sum;
+
+        if(sum>0){ //cw
+            for(it = object_list.begin(); it != object_list.end(); ++it){
+                int_cad_array[*it][14] = contournumber;
+                int_cad_array[*it][12] = 1; //cw preprocess
+                //int_cad_array[*it][1] = 1; //color red
+                double_cad_array[*it][20] = sum;
+            }
+
+        }
+
+        if(sum<0){ //ccw
+            for(it = object_list.begin(); it != object_list.end(); ++it){
+                int_cad_array[*it][14] = contournumber;
+                int_cad_array[*it][13] = 1; //ccw preprocess
+                //int_cad_array[*it][1] = 2; //color yellow
+                double_cad_array[*it][20] = sum;
+            }
+        }
+
+    }
+
+    grey = 0;
+
+    //export rearranged items to cam array
+    for(it = object_list.begin(); it != object_list.end(); ++it){
+
+        //qDebug()<< "i : " << *it;
+        copy_cad_to_cam_array(*it, cam_counter);
+        cam_counter++;
+
+    }
+
+    object_list.clear();
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
