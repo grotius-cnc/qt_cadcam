@@ -1,0 +1,39 @@
+select
+2
+description
+linuxcnc gantry XXYZ
+x axis
+X
+y axis
+Y
+x home pos
+0
+y home pos
+0
+
+select
+0
+description
+mach3 gantry XYZ slave X=A
+x axis
+X, A
+y axis
+Y
+x home pos
+0
+y home pos
+0
+
+select
+0
+description
+mach3 tube cutter
+x axis
+X
+y axis
+Y
+x home pos
+0
+y home pos
+0
+

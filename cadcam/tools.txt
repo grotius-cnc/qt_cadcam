@@ -1,0 +1,21 @@
+select
+2
+description
+2mm mild steel
+diameter
+1
+power - rpm
+45
+cutspeed
+2850
+start delay
+0.5
+start height
+1
+cut height
+0
+end delay
+0
+plunge speed
+500
+

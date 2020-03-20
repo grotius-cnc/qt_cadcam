@@ -1,0 +1,85 @@
+select
+2
+description
+plasma head
+z axis
+Z
+z travelheight
+10
+z home pos
+25
+x offset
+0
+y offset
+0
+z offset
+0
+
+select
+0
+description
+scriber
+z axis
+A
+z travelheight
+10
+z home pos
+25
+x offset
+5
+y offset
+-175
+z offset
+0
+
+select
+0
+description
+milling head
+z axis
+Z
+z travelheight
+10
+z home pos
+25
+x offset
+0
+y offset
+0
+z offset
+0
+
+select
+0
+description
+tube cutter rotation axis
+z axis
+B, C
+z travelheight
+0
+z home pos
+0
+x offset
+0
+y offset
+0
+z offset
+0
+
+select
+0
+description
+tool changer
+z axis
+B
+z travelheight
+0
+z home pos
+0
+x offset
+0
+y offset
+0
+z offset
+0
+
