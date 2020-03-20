@@ -377,8 +377,7 @@ unix:!macx: {
     contains(QT_ARCH, i386) {
         message("32-bit libs not built, you can build it manually")
     } else {
-        LIBS +=	-L$$PWD/clipper/lib/linux_x86_64/ -lpolyclipping \
-                -L$$PWD/poly2tri/lib/linux_x86_64/ -lpoly2tri
+        LIBS +=	-L$$PWD/poly2tri/lib/linux_x86_64/ -lpoly2tri
     }
 }
 
@@ -386,8 +385,7 @@ win32 {
     !contains(QMAKE_TARGET.arch, x86_64) {
         message("32-bit libs not built, you can build it manually")
     } else {
-        LIBS += -L$$PWD/clipper/lib/win_x86_64/ -lpolyclipping \
-                -L$$PWD/poly2tri/lib/win_x86_64/ -lpoly2tri
+        LIBS += -L$$PWD/poly2tri/lib/win_x86_64/ -lpoly2tri
     }
 }
 
